@@ -19,26 +19,28 @@ func main() {
 		{ID: 2, Name: "Bob"},
 	}
 
-	http.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Handling request for /users")
 		w.Header().Set("Content-Type", "application/json")
 		jsonEncoder := json.NewEncoder(w)
 		jsonEncoder.Encode(data)
-		fmt.Println("Response sent for /users : ", data)
+		fmt.Printf("Response sent for /users : %v ", data)
 	})
 
 	http.HandleFunc("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Handling request for /users/{id}")
+		fmt.Printf("Handling request for /users/{id} : %s", r.URL.Path)
 		id := r.URL.Path[len("/users/"):]
 		i, err := strconv.Atoi(id)
 		if err != nil || i < 1 || i > len(data) {
 			http.Error(w, "User not found", http.StatusNotFound)
 			return
 		}
+		fmt.Printf("Request receive with query : %s ", r.URL.Query())
+		fmt.Printf("Request receive with Headers : %s ", r.Header)
 		w.Header().Set("Content-Type", "application/json")
 		jsonEncoder := json.NewEncoder(w)
 		jsonEncoder.Encode(data[i-1])
-		fmt.Println("Response sent for /users/{id} : ", data)
+		fmt.Printf("Response sent for /users/{id} : %v ", data[i-1])
 	})
 	http.ListenAndServe(":3001", nil)
 }
