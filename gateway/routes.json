@@ -1,0 +1,14 @@
+[
+    {
+        "prefix": "/users",
+        "target": "http://localhost:3001"
+    },
+    {
+        "prefix": "/products",
+        "target": "http://localhost:3002"
+    },
+    {
+        "prefix": "/health",
+        "target": "http://localhost:3003"
+    }
+]
